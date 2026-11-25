@@ -1,0 +1,7 @@
+{
+  "$schema": "https://typedoc.org/schema.json",
+  "name": "Astrada TypeScript SDK",
+  "entryPoints": ["src/index.ts", "src/testing/index.ts"],
+  "excludeInternal": true,
+  "blockTags": ["@export", "@memberof", "@type", "@interface", "@class", "@param", "@returns", "@throws", "@example", "@deprecated"]
+}

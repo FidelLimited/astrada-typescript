@@ -7,6 +7,8 @@ openapi-generator/
 tsconfig.json
 tsconfig.esm.json
 scripts/
+tools/
+typedoc.json
 test/
 .api-spec-version
 .openapi-generator/
