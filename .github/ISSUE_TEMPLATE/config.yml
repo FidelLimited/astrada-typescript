@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Guides and API reference
+    url: https://docs.astrada.co
+    about: How to use the Astrada API, with examples.
+  - name: Questions about the API or your account
+    url: mailto:developer@astrada.co
+    about: Write to developer@astrada.co.
+  - name: Report a security problem
+    url: https://github.com/FidelLimited/astrada-typescript/security/policy
+    about: Report it privately, never in an issue.

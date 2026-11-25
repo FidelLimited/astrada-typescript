@@ -1,0 +1,28 @@
+name: Feature request
+description: An idea, or something you need that the TypeScript SDK does not do yet.
+labels: [enhancement]
+body:
+  - type: textarea
+    id: need
+    attributes:
+      label: What you want to do
+      description: The task you are trying to get done, and what gets in the way today.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: How the SDK could help
+      description: A method, an option or a code sample of how you would like to call it.
+  - type: input
+    id: sdk-version
+    attributes:
+      label: SDK version
+      placeholder: "2.0.0"
+  - type: checkboxes
+    id: no-secrets
+    attributes:
+      label: Before you send
+      options:
+        - label: I removed card numbers, tokens and secrets from this request.
+          required: true
