@@ -445,6 +445,46 @@ from, so treat `type` as a routing hint and rely on `data`.
 times"); other event types carry the parsed JSON. The payloads of every event type are on the
 [Event Types](https://docs.astrada.co/reference/event-types) page.
 
+## Filter, sort and expand lists
+
+List methods take their filters as fields of the same argument as `limit`; several filters return only what matches
+all of them, with one exception: `listTransactions` answers `400` to `cardId` and `networkBulkFeedId` together. Its
+`companyId`, `legalEntityId` and `legalEntityName` filters read cardholder data, so they need the `cardholder:read`
+scope, and with any of them a page can hold fewer than `limit` transactions, even none, while `_links.next` is still
+there: page with `paginate` (below) rather than stopping at a short page. `listTransactions` also takes `order` (`'desc'`, newest `createdAt` first, is the default; `'asc'` is oldest
+first). `expand` inlines related resources under `_embedded` in the same response, so a transaction can carry its
+card, card subscription and cardholder without more calls. An embedded key is there only when you asked for it and
+the resource exists, and it shows the resource's current values, except a cardholder's `corporate`, which is the
+one in effect on the transaction's date (its `networkToken` is always the current one). Each expanded resource
+needs its own read scope (`cards:read`, `card-subscriptions:read`, `cardholder:read`).
+
+```ts
+import { CardApi, CardSubscriptionApi, TransactionsApi } from '@astrada.co/ts-astrada-sdk';
+import { config } from './astrada.js';
+
+const subaccountId = '6f1c2a3b-4d5e-4f60-8a7b-9c0d1e2f3a4b';
+
+// Filters: the subaccount's active card subscriptions, and its US cards that expire in 2027.
+const active = await new CardSubscriptionApi(config).listCardSubscriptions({ subaccountId, state: 'active', limit: 50 });
+const expiring = await new CardApi(config).listCards({ subaccountId, country: 'USA', expiryYear: 2027 });
+console.log(active._embedded.cardSubscriptions.length, expiring._embedded.cards.length);
+
+// Sort and expand: the oldest transactions first, each with its card and cardholder inlined.
+const page = await new TransactionsApi(config).listTransactions({
+  subaccountId,
+  order: 'asc',
+  expand: ['card', 'cardholder'],
+  limit: 10,
+});
+for (const transaction of page._embedded.transactions) {
+  const card = transaction._embedded?.card; // undefined when not expanded or the card is gone
+  const cardholder = transaction._embedded?.cardholder;
+  console.log(transaction.id, card?.last4digits, cardholder?.lastName, cardholder?.corporate.legalEntity?.name);
+}
+```
+
+`paginate` (below) keeps the filters, the order and `expand` on every page.
+
 ## Pagination
 
 `paginate(method, params)` calls a list method page by page and yields each item; `listAll` collects them
@@ -705,6 +745,12 @@ Every API class and model has a page in [docs/](docs) with an example, and the T
 [fidellimited.github.io/astrada-typescript](https://fidellimited.github.io/astrada-typescript/). The SDK is
 generated from the Astrada API definition and follows its releases; new endpoints and fields arrive in minor
 versions.
+
+For AI agents and other tools, the same site serves
+[llms.txt](https://fidellimited.github.io/astrada-typescript/llms.txt) (an index of markdown copies of this
+README's sections and of the reference, the models and request arguments included, in the llmstxt.org format) and
+[llms-full.txt](https://fidellimited.github.io/astrada-typescript/llms-full.txt) (all of it in one file), built
+with the HTML from the same sources.
 
 | Class | Method | HTTP request | Description |
 |---|---|---|---|

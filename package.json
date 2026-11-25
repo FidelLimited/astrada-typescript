@@ -1,6 +1,6 @@
 {
   "name": "@astrada.co/ts-astrada-sdk",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Astrada's API client SDK for JavaScript/TypeScript",
   "author": "Peter Swanson <email@peterswanson.tech>",
   "contributors": [
@@ -54,11 +54,12 @@
     "prepare": "npm run build",
     "test": "node --test test/*.test.mjs",
     "test:snippets": "node test/check-snippets.mjs",
-    "docs:api": "typedoc --out api-docs --name \"Astrada TypeScript SDK\" --readme README.md --excludeInternal --blockTags @export --blockTags @memberof --blockTags @type --blockTags @interface --blockTags @class --blockTags @param --blockTags @returns --blockTags @throws --blockTags @example --blockTags @deprecated --entryPoints src/index.ts --entryPoints src/testing/index.ts"
+    "docs:api": "typedoc --options typedoc.json --out api-docs --readme README.md && typedoc --options typedoc.json --out api-docs/md/reference --readme none --plugin typedoc-plugin-markdown && node tools/llms.mjs"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",
     "typedoc": "0.28.20",
+    "typedoc-plugin-markdown": "4.14.1",
     "typescript": "^4.0 || ^5.0"
   },
   "publishConfig": {
