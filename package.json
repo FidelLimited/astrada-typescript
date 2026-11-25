@@ -1,0 +1,68 @@
+{
+  "name": "@astrada.co/ts-astrada-sdk",
+  "version": "2.0.0",
+  "description": "Astrada's API client SDK for JavaScript/TypeScript",
+  "author": "Peter Swanson <email@peterswanson.tech>",
+  "contributors": [
+    "Astrada <developer@astrada.co> (https://astrada.co)"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/FidelLimited/astrada-typescript.git"
+  },
+  "license": "MIT",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "module": "./dist/esm/index.js",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/esm/index.d.ts",
+        "default": "./dist/esm/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      }
+    },
+    "./testing": {
+      "import": {
+        "types": "./dist/esm/testing/index.d.ts",
+        "default": "./dist/esm/testing/index.js"
+      },
+      "require": {
+        "types": "./dist/testing/index.d.ts",
+        "default": "./dist/testing/index.js"
+      }
+    },
+    "./package.json": "./package.json"
+  },
+  "typesVersions": {
+    "*": {
+      "testing": [
+        "./dist/testing/index.d.ts"
+      ]
+    }
+  },
+  "sideEffects": false,
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "prebuild": "rm -rf dist",
+    "build": "tsc && tsc -p tsconfig.esm.json && echo '{\"type\":\"module\"}' > dist/esm/package.json",
+    "prepare": "npm run build",
+    "test": "node --test test/*.test.mjs",
+    "test:snippets": "node test/check-snippets.mjs",
+    "docs:api": "typedoc --out api-docs --name \"Astrada TypeScript SDK\" --readme README.md --excludeInternal --blockTags @export --blockTags @memberof --blockTags @type --blockTags @interface --blockTags @class --blockTags @param --blockTags @returns --blockTags @throws --blockTags @example --blockTags @deprecated --entryPoints src/index.ts --entryPoints src/testing/index.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typedoc": "0.28.20",
+    "typescript": "^4.0 || ^5.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  }
+}

@@ -1,0 +1,15 @@
+.github/
+.editorconfig
+.releaserc
+openapitools.json
+docs
+openapi-generator/
+tsconfig.json
+tsconfig.esm.json
+scripts/
+test/
+.api-spec-version
+.openapi-generator/
+.openapi-generator-ignore
+api-docs/
+.snippets-check/
